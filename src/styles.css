@@ -911,6 +911,36 @@ body {
   padding: 12px 30px;
   min-height: 44px;
 }
+/* Arrow-only Previous/Next: compact tappable squares flanking the Share button. */
+.detail__nav .detail__arrow {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 22px;
+  min-height: 44px;
+  font-size: 1.5rem;
+  line-height: 1;
+}
+/* Share: fixed width so the label changing (Share → Preparing… → Image saved)
+   never resizes the button or shoves the arrows. Sized for the longest label. */
+.detail__nav .detail__share {
+  flex: 0 0 auto;
+  min-width: 190px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 12px 16px;
+  color: var(--gold);
+  border-color: rgba(244, 198, 106, 0.4);
+}
+.detail__nav .detail__share:disabled {
+  opacity: 0.6;
+}
+.detail__share-icon {
+  flex: none;
+}
 .btn--ghost {
   background: transparent;
   border: 1px solid var(--line);
@@ -940,18 +970,21 @@ body {
   font-size: 0.95rem;
   font-weight: 600;
 }
-/* Rounded photo of the artist, under the "show to artist" line. */
+/* Rounded photo of the artist. Pinned to the bottom of the page (margin-top:auto
+   in the page's flex column) and centred, so its centre lines up with the fixed
+   day/night toggle: toggle bottom offset (16px + max(20px, safe)) + 25px (half of
+   the 50px toggle) − 36px (half of this 72px photo) = 5px + max(20px, safe). */
 .detail__artist-link {
   display: block;
-  width: 52px;
-  margin: 14px auto 0;
+  width: 72px;
+  margin: auto auto calc(5px + max(20px, env(safe-area-inset-bottom))) auto;
   border-radius: 50%;
   line-height: 0;
 }
 .detail__artist {
   display: block;
-  width: 52px;
-  height: 52px;
+  width: 72px;
+  height: 72px;
   border-radius: 50%;
   object-fit: cover;
   object-position: 50% 30%;
@@ -966,17 +999,22 @@ body {
     animation: none;
   }
 }
+/* Contest CTA: sits right under the "show to artist" hint as a second line,
+   matching its font/colour (gold, no underline). */
 .detail__contest-link {
   appearance: none;
   border: none;
   background: none;
   cursor: pointer;
   display: inline-block;
-  margin: 18px auto 0;
+  margin: 6px 0 0;
   color: var(--gold);
   font: inherit;
-  font-size: 0.92rem;
+  font-size: 0.95rem;
   font-weight: 600;
-  text-decoration: underline;
-  text-underline-offset: 2px;
+}
+/* Border under the text only — the ✦ icons stay un-underlined. */
+.detail__contest-text {
+  padding-bottom: 3px;
+  border-bottom: 1px solid currentColor;
 }

@@ -36,6 +36,11 @@ export type UIKey =
   | 'contestSuccess'
   | 'contestWinnerNote'
   | 'contestEventName'
+  | 'share'
+  | 'sharing'
+  | 'shareSaved'
+  | 'shareError'
+  | 'shareText'
 
 export const UI: Record<UIKey, Record<Lang, string>> = {
   eventName: { be: 'varushniak', en: 'varushniak' },
@@ -53,8 +58,8 @@ export const UI: Record<UIKey, Record<Lang, string>> = {
   chooseLook: { be: 'Абярыце вобраз', en: 'Choose a look' },
   back: { be: 'Назад', en: 'Back' },
   showToArtist: {
-    be: 'Пакажыце гэты вобраз майстру',
-    en: 'Show this look to the artist',
+    be: 'Пакажы гэты вобраз майстру і',
+    en: 'Show this look to the artist and',
   },
   madeBy: {
     be: 'створана neurokitsune і claude',
@@ -62,6 +67,14 @@ export const UI: Record<UIKey, Record<Lang, string>> = {
   },
   prev: { be: 'Папярэдні', en: 'Previous' },
   next: { be: 'Наступны', en: 'Next' },
+  share: { be: 'Падзяліцца', en: 'Share' },
+  sharing: { be: 'Рыхтуем…', en: 'Preparing…' },
+  shareSaved: { be: 'Выява захавана', en: 'Image saved' },
+  shareError: { be: 'Не атрымалася', en: 'Could not share' },
+  shareText: {
+    be: 'Мой вобраз з varushniak makeup',
+    en: 'My look from varushniak makeup',
+  },
   winInContest: { be: 'Выйграй 100 zł у нашай Гульні', en: 'Win 100 zł in our contest' },
   chancePrompt: { be: 'Я…', en: 'I am…' },
   chanceWoman: { be: 'Жанчына', en: 'Woman' },
