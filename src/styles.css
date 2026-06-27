@@ -1,0 +1,974 @@
+:root {
+  /* Default (night) UA color scheme: keeps the browser canvas, scrollbars, form
+     controls, and the area behind a translucent status bar dark. The day theme
+     flips it to light so a light browser shows white there, not black. */
+  color-scheme: dark;
+
+  /* Shared tokens. */
+  --radius: 18px;
+  --radius-lg: 24px;
+  --maxw: 480px;
+  --font: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial,
+    sans-serif;
+
+  /* ── Night theme (default): deep indigo night, ember fire, gold. ──────────── */
+  --bg: #140a1e;
+  --bg-2: #1f1030;
+  --surface: #271640;
+  --ink: #f6ecdc;
+  --ink-dim: #c7b6c9;
+  --ember: #ff7a3c;
+  --ember-2: #ffb070;
+  --gold: #f4c66a;
+  --accent-ink: #2a1606; /* text that sits on ember/gold fills */
+  --toast-bg: #f4c66a; /* yellow toast (night) */
+  --toast-ink: #2a1606;
+  /* Shared accent fill — Start button and both toggles use this (auto-adapts
+     per theme via --ember / --gold). */
+  --accent-fill: linear-gradient(135deg, var(--ember) 0%, var(--gold) 100%);
+  --line: rgba(244, 198, 106, 0.18);
+  --control-bg: rgba(0, 0, 0, 0.2);
+  --page-bg:
+    radial-gradient(120% 80% at 50% -10%, #3a1c4a 0%, transparent 55%),
+    radial-gradient(90% 60% at 50% 110%, #5a2a1a 0%, transparent 55%), var(--bg);
+  --home-text-shadow: 0 1px 3px rgba(0, 0, 0, 0.85), 0 2px 18px rgba(0, 0, 0, 0.7);
+  /* Soft focused halo behind the hero text (dims just that area). */
+  --home-halo: rgba(8, 5, 14, 0.62);
+  /* Stronger, fairly uniform veil for the contest page (lots of text to read). */
+  --contest-veil: linear-gradient(
+    180deg,
+    rgba(12, 7, 20, 0.82) 0%,
+    rgba(12, 7, 20, 0.8) 45%,
+    rgba(12, 7, 20, 0.92) 100%
+  );
+  /* Scrim over the home painting so text stays legible (darkens top + bottom). */
+  --home-veil: linear-gradient(
+    180deg,
+    rgba(15, 8, 24, 0.55) 0%,
+    rgba(15, 8, 24, 0.22) 38%,
+    rgba(15, 8, 24, 0.78) 100%
+  );
+}
+
+/* ── Day theme: high-contrast for direct sunlight. ───────────────────────────
+   Dark ink on warm paper, deep ember accents so text and borders stay legible
+   outdoors. */
+:root[data-theme='day'] {
+  color-scheme: light;
+  --bg: #faf4e8;
+  --bg-2: #efe6d4;
+  --surface: #ffffff;
+  --ink: #241405;
+  --ink-dim: #6b5a44;
+  --ember: #d2461a;
+  --ember-2: #b8390f;
+  --gold: #a9760e;
+  --accent-ink: #fff7ec;
+  --toast-bg: #ffd766; /* clear yellow toast (day) */
+  --toast-ink: #2a1606;
+  --line: rgba(60, 40, 12, 0.22);
+  --control-bg: rgba(0, 0, 0, 0.04);
+  --page-bg:
+    radial-gradient(120% 80% at 50% -10%, #ffe9c8 0%, transparent 55%),
+    radial-gradient(90% 60% at 50% 110%, #ffd9b0 0%, transparent 55%), var(--bg);
+  --home-text-shadow: 0 1px 3px rgba(255, 252, 245, 0.95), 0 2px 16px rgba(255, 250, 240, 0.9);
+  --home-halo: rgba(255, 251, 244, 0.78);
+  --contest-veil: linear-gradient(
+    180deg,
+    rgba(250, 244, 232, 0.9) 0%,
+    rgba(250, 244, 232, 0.86) 45%,
+    rgba(250, 244, 232, 0.95) 100%
+  );
+  /* Lighter scrim for the bright daytime painting (dark ink sits on top). */
+  --home-veil: linear-gradient(
+    180deg,
+    rgba(250, 244, 232, 0.40) 0%,
+    rgba(250, 244, 232, 0.10) 34%,
+    rgba(250, 244, 232, 0.82) 100%
+  );
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+  /* Fill the overscroll / safe-area / behind-status-bar regions with the theme
+     base color so they never flash white in a light browser (or black in a
+     dark one) outside the painted body. */
+  background-color: var(--bg);
+}
+
+body {
+  font-family: var(--font);
+  color: var(--ink);
+  background: var(--page-bg);
+  background-attachment: fixed;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+#root {
+  display: flex;
+  justify-content: center;
+}
+
+/* ── Layout ──────────────────────────────────────────────────────────────── */
+.page {
+  width: 100%;
+  max-width: var(--maxw);
+  min-height: 100%;
+  /* No bottom padding here: a column flex container drops padding-bottom once
+     its content overflows. The footer owns the bottom clearance instead. */
+  padding: max(16px, env(safe-area-inset-top)) 18px 0 18px;
+  display: flex;
+  flex-direction: column;
+}
+
+.page__title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  margin: 4px 2px 18px;
+}
+
+/* ── Header ──────────────────────────────────────────────────────────────── */
+.app-header {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 10px;
+  min-height: 40px;
+  margin-bottom: 10px;
+}
+
+.app-header__title {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  max-width: 55%;
+  text-align: center;
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.back-btn {
+  appearance: none;
+  border: none;
+  background: none;
+  color: var(--ink-dim);
+  font: inherit;
+  font-size: 0.95rem;
+  padding: 6px 4px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.back-btn span {
+  font-size: 1.4rem;
+  line-height: 1;
+}
+.back-btn.placeholder {
+  visibility: hidden;
+}
+
+/* ── Language toggle ─────────────────────────────────────────────────────── */
+.lang-toggle {
+  position: fixed;
+  top: calc(5px + max(16px, env(safe-area-inset-top)));
+  right: max(18px, env(safe-area-inset-right));
+  z-index: 50;
+  display: inline-flex;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  overflow: hidden;
+  background: rgba(0, 0, 0, 0.2);
+}
+.lang-toggle button {
+  appearance: none;
+  border: none;
+  background: none;
+  color: var(--ink-dim);
+  font: inherit;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  padding: 6px 12px;
+  cursor: pointer;
+}
+.lang-toggle button.active {
+  background: var(--accent-fill);
+  color: var(--accent-ink);
+}
+
+/* Light theme: darken the back button and the inactive language label so they
+   stay readable over light/photo backgrounds. */
+:root[data-theme='day'] .back-btn,
+:root[data-theme='day'] .lang-toggle button:not(.active) {
+  color: var(--ink);
+}
+
+/* ── Theme (day/night) toggle — fixed floating button, bottom-right ───────── */
+.theme-toggle {
+  position: fixed;
+  right: max(18px, env(safe-area-inset-right));
+  /* Bottom edge aligns with the home Start button's row: home page
+     padding-bottom + the .home__cta padding-bottom (16px). */
+  bottom: calc(16px + max(20px, env(safe-area-inset-bottom)));
+  z-index: 50;
+  appearance: none;
+  border: 1px solid var(--line);
+  /* Same accent fill as the Start button and language toggle. */
+  background: var(--accent-fill);
+  color: var(--accent-ink);
+  font-size: 1.5rem;
+  line-height: 1;
+  width: 50px; /* same height as the .btn--primary Start button */
+  height: 50px;
+  border-radius: 999px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+}
+/* Gently breathing gold halo — added only on screens with a painting backdrop
+   (home / contest / chance) via the --glow modifier in ThemeToggle.tsx. */
+/* One shared gold-halo pulse. Each user sets its own --glow-from/--glow-to
+   box-shadow pair (theme toggle, prize cards, toast, artist avatar). */
+@keyframes glow-pulse {
+  0%,
+  100% {
+    box-shadow: var(--glow-from);
+  }
+  50% {
+    box-shadow: var(--glow-to);
+  }
+}
+.theme-toggle--glow {
+  --glow-from: 0 6px 20px rgba(0, 0, 0, 0.35), 0 0 8px rgba(244, 198, 106, 0.35);
+  --glow-to: 0 6px 22px rgba(0, 0, 0, 0.4), 0 0 24px rgba(244, 198, 106, 0.8);
+  animation: glow-pulse 2.6s ease-in-out infinite;
+}
+.theme-toggle:active {
+  transform: scale(0.94);
+}
+@media (prefers-reduced-motion: reduce) {
+  .theme-toggle--glow {
+    animation: none;
+  }
+}
+
+/* ── Buttons ─────────────────────────────────────────────────────────────── */
+.btn {
+  appearance: none;
+  border: none;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  border-radius: 999px;
+  padding: 15px 28px;
+  font-size: 1.05rem;
+}
+.btn--primary {
+  background: var(--accent-fill);
+  color: var(--accent-ink);
+  box-shadow: 0 8px 24px rgba(255, 122, 60, 0.3);
+}
+/* Gently pulsing Start button on the home page. */
+.home__cta .btn--primary {
+  animation: start-pulse 2.6s ease-in-out infinite;
+}
+@keyframes start-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+    box-shadow: 0 8px 22px rgba(255, 122, 60, 0.3);
+  }
+  50% {
+    transform: scale(1.035);
+    box-shadow: 0 10px 30px rgba(255, 122, 60, 0.6);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .home__cta .btn--primary {
+    animation: none;
+  }
+}
+.btn--primary:active {
+  transform: translateY(1px);
+}
+
+/* ── Home ────────────────────────────────────────────────────────────────── */
+.home {
+  justify-content: space-between;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Full-bleed painting backdrop + atmospheric layers. */
+.home-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: var(--bg-2); /* fallback before the image loads / exists */
+}
+.home-bg__img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 30%;
+}
+.home-bg__veil {
+  position: absolute;
+  inset: 0;
+  background: var(--home-veil);
+}
+.home-sparks {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+.spark {
+  position: absolute;
+  bottom: -14px;
+  border-radius: 50%;
+  opacity: 0;
+  animation-name: spark-rise;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+@keyframes spark-rise {
+  0% {
+    transform: translateY(0) scale(1);
+    opacity: 0;
+  }
+  12% {
+    opacity: 0.95;
+  }
+  100% {
+    transform: translateY(-100vh) scale(0.3);
+    opacity: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .spark {
+    animation: none;
+  }
+}
+
+/* Keep all home content above the backdrop layers. */
+.home__hero,
+.home__cta {
+  position: relative;
+  z-index: 2;
+}
+.home__hero {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 10px;
+}
+/* Blurred, tinted halo sitting behind just the title + tagline so they read
+   clearly while the rest of the painting stays sharp and visible. */
+.home__hero::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 130%;
+  height: 56%;
+  transform: translate(-50%, -50%);
+  z-index: -1;
+  border-radius: 50%;
+  background: radial-gradient(
+    ellipse at center,
+    var(--home-halo) 0%,
+    var(--home-halo) 42%,
+    transparent 72%
+  );
+  pointer-events: none;
+}
+.home__mark {
+  font-size: 2.4rem;
+  line-height: 1;
+  color: var(--gold);
+  text-shadow: 0 0 24px rgba(244, 198, 106, 0.6);
+  display: inline-block; /* allow the rotate/scale transforms below */
+}
+/* Night: a half-moon that glows in the same breathing rhythm as the Start button. */
+.home__mark--moon {
+  animation: moon-glow 2.6s ease-in-out infinite;
+}
+@keyframes moon-glow {
+  0%,
+  100% {
+    transform: scale(1);
+    text-shadow: 0 0 12px rgba(244, 198, 106, 0.45);
+  }
+  50% {
+    transform: scale(1.06);
+    text-shadow: 0 0 30px rgba(244, 198, 106, 0.95);
+  }
+}
+/* Day: a sun slowly circling, in the buttons' orange (--ember). */
+.home__mark--sun {
+  color: var(--ember);
+  text-shadow: 0 0 22px rgba(210, 70, 26, 0.55);
+  animation: sun-spin 10s linear infinite;
+}
+@keyframes sun-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .home__mark--moon,
+  .home__mark--sun {
+    animation: none;
+  }
+}
+.home__title {
+  font-size: clamp(2.6rem, 14vw, 3.6rem);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  margin: 0;
+  background: linear-gradient(135deg, var(--ember-2), var(--gold));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  filter: drop-shadow(var(--home-text-shadow));
+}
+.home__tagline {
+  font-size: 1.05rem;
+  color: var(--ink-dim);
+  margin: 0;
+  max-width: 16em;
+  text-shadow: var(--home-text-shadow);
+}
+.home__cta {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding-bottom: 16px;
+}
+.home__intro {
+  color: var(--ink-dim);
+  font-size: 1.05rem; /* match the tagline */
+  margin: 0;
+  text-align: center;
+  text-shadow: var(--home-text-shadow);
+}
+
+/* ── Page footer (credit line) ───────────────────────────────────────────── */
+.page-footer__link {
+  color: inherit;
+  text-decoration: none;
+  border-bottom: 1px solid currentColor;
+  padding-bottom: 1px;
+}
+.page-footer {
+  margin-top: auto; /* sit at the end of short pages */
+  padding-top: 28px;
+  /* Own bottom clearance (not the page's — flex drops that on overflow) so the
+     credit keeps the same gap from the bottom edge on every page. */
+  padding-bottom: calc(28px + env(safe-area-inset-bottom));
+  text-align: center;
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  color: var(--ink-dim);
+  opacity: 0.7;
+  position: relative;
+  z-index: 2; /* above the home painting backdrop */
+}
+
+/* ── Style choice — plain stacked list, full-width cards. ─────────────────── */
+.style-grid {
+  display: grid;
+  gap: 12px;
+}
+.style-card {
+  appearance: none;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: inherit;
+  border-radius: 10px; /* gently rounded cards */
+  overflow: hidden;
+  cursor: pointer;
+  text-align: left;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+.style-card:active {
+  transform: scale(0.99);
+}
+.style-card__media {
+  position: relative;
+  aspect-ratio: 21 / 10;
+  overflow: hidden;
+  background: var(--bg-2);
+  /* Matted "picture frame" around the image (border-box keeps card height). */
+  border: 7px solid var(--surface);
+  box-shadow: inset 0 0 0 1px var(--line);
+}
+.style-card__media img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 35%; /* favor the eyes / makeup area on look photos */
+  display: block;
+}
+/* Icon/text media for the Chance and Contest cards (no photo). */
+.style-card__media--glyph {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background:
+    radial-gradient(120% 90% at 50% 20%, rgba(255, 122, 60, 0.18), transparent 70%),
+    var(--bg-2);
+  color: var(--gold);
+  font-size: 2.2rem;
+}
+.style-card--prize,
+.style-card--special {
+  border: 1px solid var(--line);
+  --glow-from: 0 0 0 1px rgba(244, 198, 106, 0.12), 0 0 10px rgba(244, 198, 106, 0.1);
+  --glow-to: 0 0 0 1px rgba(244, 198, 106, 0.55), 0 0 24px rgba(244, 198, 106, 0.4);
+  animation: glow-pulse 2.6s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .style-card--prize,
+  .style-card--special {
+    animation: none;
+  }
+}
+.style-card__body {
+  padding: 8px 16px 10px;
+}
+.style-card__name {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+.style-card__tagline {
+  margin: 2px 0 0;
+  color: var(--ink-dim);
+  font-size: 0.82rem;
+}
+
+/* ── Contest ─────────────────────────────────────────────────────────────── */
+.contest {
+  position: relative;
+  overflow: hidden;
+}
+/* Full-bleed painting backdrop + readability veil (same approach as home). */
+.contest-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: var(--bg-2);
+}
+.contest-bg__img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 30%;
+}
+.contest-bg__veil {
+  position: absolute;
+  inset: 0;
+  background: var(--contest-veil);
+}
+/* Keep header and content above the backdrop; center the body vertically. */
+.contest .app-header {
+  position: relative;
+  z-index: 1;
+}
+.contest__content {
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.contest__content .contest__note,
+.contest__content .contest__how,
+.contest__content .contest__steps,
+.contest__content .contest__winner,
+.contest__content .contest__label,
+.contest__content .contest__success {
+  text-shadow: var(--home-text-shadow);
+}
+
+.contest__prize {
+  text-align: center;
+  margin: 8px 0 20px;
+}
+.contest__art {
+  display: block;
+  width: 100%;
+  max-width: 300px;
+  margin: 0 auto;
+}
+.contest__note {
+  margin: 8px auto 0;
+  max-width: 22em;
+  color: var(--ink-dim);
+}
+.contest__how {
+  margin: 0 0 8px;
+  font-size: 1.05rem;
+  font-weight: 600;
+}
+.contest__steps {
+  margin: 0 0 22px;
+  padding-left: 1.2em;
+  line-height: 1.6;
+}
+.contest__tag {
+  color: var(--gold);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+/* Same gold as the link, but not clickable (rule 1). */
+.contest__name {
+  color: var(--gold);
+  font-weight: 600;
+}
+.contest__form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.contest__input {
+  appearance: none;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--ink);
+  border-radius: 999px;
+  padding: 13px 18px;
+  font: inherit;
+  font-size: 1rem;
+}
+.contest__input:focus {
+  outline: none;
+  border-color: var(--gold);
+}
+.contest__form .btn--primary {
+  margin-top: 4px;
+}
+.btn--primary:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+.contest__success {
+  margin: 30px 0;
+  text-align: center;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--gold);
+}
+.contest__winner {
+  margin: 22px 0 0;
+  text-align: center;
+  font-size: 0.85rem;
+  color: var(--ink-dim);
+  opacity: 0.8;
+}
+
+/* Look list reuses the .style-card / .style-grid styles (same as the style list). */
+
+/* ── Chance (gender pick) ────────────────────────────────────────────────── */
+.chance {
+  position: relative;
+  overflow: hidden;
+}
+/* Themed backdrop with the same centered light/dark spot as the home page. */
+.chance-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: var(--bg-2);
+}
+.chance-bg__img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 28%;
+}
+.chance-bg__veil {
+  position: absolute;
+  inset: 0;
+  background: var(--home-veil);
+}
+.chance .app-header {
+  position: relative;
+  z-index: 1;
+}
+.chance__content {
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 26px;
+}
+/* Focused halo behind the prompt + buttons (matches the home hero spot). */
+.chance__content::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 132%;
+  height: 54%;
+  transform: translate(-50%, -50%);
+  z-index: -1;
+  border-radius: 50%;
+  background: radial-gradient(
+    ellipse at center,
+    var(--home-halo) 0%,
+    var(--home-halo) 42%,
+    transparent 72%
+  );
+  pointer-events: none;
+}
+.chance__prompt {
+  margin: 0;
+  font-size: 1.9rem;
+  font-weight: 700;
+  text-shadow: var(--home-text-shadow);
+}
+.chance__options {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  max-width: 280px;
+}
+.chance__options .btn {
+  width: 100%;
+}
+/* Woman & Man share the pill shape; Woman is filled and gently glows. */
+.chance__woman {
+  background: var(--accent-fill);
+  color: var(--accent-ink);
+  animation: start-pulse 2.6s ease-in-out infinite;
+}
+.chance__man {
+  background: transparent;
+  border: 2px solid var(--gold);
+  color: var(--ink);
+}
+/* "Prefer not to say": small underlined link, a button-height below the buttons. */
+.chance__prefer {
+  appearance: none;
+  border: none;
+  background: none;
+  cursor: pointer;
+  margin-top: 24px; /* + the 26px content gap ≈ one button height below the buttons */
+  color: var(--ink);
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-shadow: var(--home-text-shadow);
+}
+@media (prefers-reduced-motion: reduce) {
+  .chance__woman {
+    animation: none;
+  }
+}
+
+/* ── Toast (non-blocking) ────────────────────────────────────────────────── */
+.toast {
+  position: fixed;
+  left: 50%;
+  top: calc(14px + env(safe-area-inset-top));
+  z-index: 100;
+  max-width: 88%;
+  padding: 12px 20px;
+  border-radius: 999px;
+  background: var(--toast-bg);
+  color: var(--toast-ink);
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-align: center;
+  opacity: 0;
+  transform: translate(-50%, -160%);
+  pointer-events: none;
+}
+/* Falls in from the top, holds long enough to read, then keeps falling away.
+   A second animation pulses a warm gold halo while it's on screen. */
+.toast--show {
+  --glow-from: 0 8px 24px rgba(0, 0, 0, 0.35), 0 0 10px rgba(244, 198, 106, 0.45);
+  --glow-to: 0 8px 28px rgba(0, 0, 0, 0.4), 0 0 28px rgba(244, 198, 106, 0.9);
+  animation: toast-fall 5s ease-in-out forwards, glow-pulse 1.8s ease-in-out infinite;
+}
+@keyframes toast-fall {
+  0% {
+    transform: translate(-50%, -160%);
+    opacity: 0;
+  }
+  5% {
+    transform: translate(-50%, 0);
+    opacity: 1;
+  }
+  92% {
+    transform: translate(-50%, 0);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, 70px);
+    opacity: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .toast--show {
+    animation: none;
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
+
+/* ── Detail ──────────────────────────────────────────────────────────────── */
+/* Big, narrow (portrait) photo cropped to the eyes / makeup. */
+.detail__media {
+  position: relative;
+  aspect-ratio: 3 / 4;
+  border-radius: 10px;
+  overflow: hidden;
+  background: var(--bg-2);
+  border: 1px solid var(--line);
+}
+.detail__media img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 35%;
+  display: block;
+}
+.detail__nav {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 12px;
+}
+.detail__nav .btn {
+  flex: 1;
+  padding: 12px;
+  font-size: 0.95rem;
+}
+/* Single "Try again" button (Chance flow): natural tappable size, centered. */
+.detail__nav .detail__again {
+  flex: 0 0 auto;
+  padding: 12px 30px;
+  min-height: 44px;
+}
+.btn--ghost {
+  background: transparent;
+  border: 1px solid var(--line);
+  color: var(--ink);
+}
+.btn--ghost:active {
+  transform: translateY(1px);
+}
+.detail__body {
+  padding: 20px 4px 0;
+  text-align: center;
+}
+.detail__name {
+  margin: 0;
+  font-size: 1.8rem;
+  font-weight: 700;
+}
+.detail__desc {
+  margin: 10px 0 0;
+  color: var(--ink-dim);
+  font-size: 1.05rem;
+  line-height: 1.5;
+}
+.detail__hint {
+  margin: 18px 0 0;
+  color: var(--gold);
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+/* Rounded photo of the artist, under the "show to artist" line. */
+.detail__artist-link {
+  display: block;
+  width: 52px;
+  margin: 14px auto 0;
+  border-radius: 50%;
+  line-height: 0;
+}
+.detail__artist {
+  display: block;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  object-fit: cover;
+  object-position: 50% 30%;
+  background: var(--bg-2);
+  /* 'from' carries a 0px ring so it interpolates smoothly to the 2px ring. */
+  --glow-from: 0 0 0 0 rgba(244, 198, 106, 0.3), 0 0 6px rgba(244, 198, 106, 0.3);
+  --glow-to: 0 0 0 2px rgba(244, 198, 106, 0.5), 0 0 16px rgba(244, 198, 106, 0.6);
+  animation: glow-pulse 2.6s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .detail__artist {
+    animation: none;
+  }
+}
+.detail__contest-link {
+  appearance: none;
+  border: none;
+  background: none;
+  cursor: pointer;
+  display: inline-block;
+  margin: 18px auto 0;
+  color: var(--gold);
+  font: inherit;
+  font-size: 0.92rem;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}

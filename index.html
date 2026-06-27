@@ -1,30 +1,74 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Makeup</title>
-  <style>
-    html, body {
-      height: 100%;
-      margin: 0;
-    }
-    body {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      background: #faf7f5;
-      color: #2b2b2b;
-    }
-    .phrase {
-      font-size: 2.5rem;
-      font-weight: 300;
-      letter-spacing: 0.05em;
-    }
-  </style>
-</head>
-<body>
-  <div class="phrase">coming soon</div>
-</body>
+<!doctype html>
+<html lang="be">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    <meta name="theme-color" content="#140a1e" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <!-- Apply the saved/time-based theme before first paint so the status bar and
+         page background never flash the wrong color. Mirrors initialTheme() in
+         src/theme/ThemeContext.tsx; ThemeProvider re-applies the same value. -->
+    <script>
+      (function () {
+        try {
+          var saved = localStorage.getItem('makeup.theme')
+          var hour = new Date().getHours()
+          var theme =
+            saved === 'day' || saved === 'night'
+              ? saved
+              : hour >= 7 && hour < 21
+                ? 'day'
+                : 'night'
+          document.documentElement.dataset.theme = theme
+          var meta = document.querySelector('meta[name="theme-color"]')
+          if (meta) meta.setAttribute('content', theme === 'day' ? '#faf4e8' : '#140a1e')
+        } catch (e) {}
+      })()
+    </script>
+    <title>Купалле — макіяж</title>
+
+    <!-- ── SEO ─────────────────────────────────────────────────────────────── -->
+    <meta
+      name="description"
+      content="Абяры свой макіяж на ноч Купалля — лініі, стразы, пэрлы, кветкі. Прагартай вобразы і пакажы абраны майстру."
+    />
+    <meta name="author" content="neurokitsune" />
+    <!-- "Varushniak" (the event) lives here only — kept out of the title/description by request. -->
+    <meta
+      name="keywords"
+      content="Купалле, Kupalle, Купалля, летняе сонцастаянне, summer solstice, макіяж, makeup, фэйс-арт, face art, Varushniak, Варушняк, Daria Kalechits, daria_kalechits, neurokitsune, свята, фестываль"
+    />
+    <link rel="canonical" href="https://neurokitsune.github.io/makeup/" />
+
+    <!-- Open Graph (link previews) -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Купалле — макіяж" />
+    <meta property="og:title" content="Купалле — макіяж" />
+    <meta
+      property="og:description"
+      content="Абяры свой макіяж на ноч Купалля і пакажы абраны вобраз майстру."
+    />
+    <meta property="og:url" content="https://neurokitsune.github.io/makeup/" />
+    <meta property="og:image" content="https://neurokitsune.github.io/makeup/bg/home-night.jpg" />
+    <meta property="og:image:alt" content="Купальская ноч" />
+    <meta property="og:locale" content="be_BY" />
+    <meta property="og:locale:alternate" content="en_US" />
+
+    <!-- Twitter / X card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Купалле — макіяж" />
+    <meta
+      name="twitter:description"
+      content="Абяры свой макіяж на ноч Купалля і пакажы абраны вобраз майстру."
+    />
+    <meta name="twitter:image" content="https://neurokitsune.github.io/makeup/bg/home-night.jpg" />
+
+    <!-- Umami analytics (cloud). Events are wired in src/analytics.ts. -->
+    <script defer src="https://cloud.umami.is/script.js" data-website-id="ae51a50a-378c-465a-9072-c381eeeae0b0"></script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
 </html>

@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 152" role="img" aria-label="Flowers style placeholder">
+  <defs>
+    <g id="flw">
+      <g class="petals">
+        <circle cx="0" cy="-1" r="0.64"/>
+        <circle cx="0.95" cy="-0.31" r="0.64"/>
+        <circle cx="0.59" cy="0.81" r="0.64"/>
+        <circle cx="-0.59" cy="0.81" r="0.64"/>
+        <circle cx="-0.95" cy="-0.31" r="0.64"/>
+      </g>
+    </g>
+  </defs>
+  <g transform="translate(58,112) scale(8)"><g fill="#ff7aa8"><use href="#flw"/></g><circle r="0.5" fill="#ffd24d"/></g>
+  <g transform="translate(100,92) scale(9)"><g fill="#b06ad0"><use href="#flw"/></g><circle r="0.5" fill="#ffe07a"/></g>
+  <g transform="translate(146,74) scale(8)"><g fill="#5fc97a"><use href="#flw"/></g><circle r="0.5" fill="#ff5a8a"/></g>
+  <g transform="translate(190,62) scale(9)"><g fill="#5b8fe0"><use href="#flw"/></g><circle r="0.5" fill="#ffd24d"/></g>
+  <g transform="translate(234,50) scale(8)"><g fill="#e0519a"><use href="#flw"/></g><circle r="0.5" fill="#fff3b0"/></g>
+  <g transform="translate(270,86) scale(7)"><g fill="#3fb8a8"><use href="#flw"/></g><circle r="0.5" fill="#ff7aa8"/></g>
+</svg>

@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 152" role="img" aria-label="Lines style placeholder">
+  <defs>
+    <path id="l1" d="M58 74 q 16 -22 34 -2 q 16 18 34 -2 q 14 -16 26 -2"/>
+    <path id="l2" d="M168 70 q 16 -20 34 -2 q 16 18 34 -2 q 14 -16 26 -2"/>
+  </defs>
+  <!-- dark outline for contrast on light backgrounds -->
+  <g fill="none" stroke="#4a0a2a" stroke-width="11" stroke-linecap="round" stroke-linejoin="round">
+    <use href="#l1"/><use href="#l2"/>
+  </g>
+  <!-- neon pink stroke on top -->
+  <g fill="none" stroke="#ff2d8f" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+    <use href="#l1"/><use href="#l2"/>
+  </g>
+  <g>
+    <circle cx="150" cy="82" r="6" fill="#4a0a2a"/><circle cx="150" cy="82" r="3.5" fill="#ff2d8f"/>
+    <circle cx="84" cy="102" r="6" fill="#4a0a2a"/><circle cx="84" cy="102" r="3.5" fill="#ff2d8f"/>
+    <circle cx="236" cy="98" r="6" fill="#4a0a2a"/><circle cx="236" cy="98" r="3.5" fill="#ff2d8f"/>
+  </g>
+</svg>

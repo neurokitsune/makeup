@@ -1,0 +1,11 @@
+node_modules
+dist
+dist-ssr
+*.local
+.DS_Store
+.vite
+tsconfig.tsbuildinfo
+.claude/settings.local.json
+
+# Full-res original photos — optimized into public/ via `npm run optimize`
+raw

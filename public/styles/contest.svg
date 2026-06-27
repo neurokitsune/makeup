@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 152" role="img" aria-label="Win 100 zl">
+  <defs>
+    <!-- poppy (red) -->
+    <g id="poppy">
+      <g fill="#e0241c">
+        <ellipse cx="0" cy="-0.62" rx="0.6" ry="0.74"/>
+        <ellipse cx="0.62" cy="-0.08" rx="0.74" ry="0.58"/>
+        <ellipse cx="-0.62" cy="-0.08" rx="0.74" ry="0.58"/>
+        <ellipse cx="0.4" cy="0.58" rx="0.64" ry="0.58"/>
+        <ellipse cx="-0.4" cy="0.58" rx="0.64" ry="0.58"/>
+      </g>
+      <circle r="0.34" fill="#1b1b1b"/>
+      <g fill="#2a2a2a">
+        <circle cx="0" cy="-0.32" r="0.07"/><circle cx="0.3" cy="-0.1" r="0.07"/>
+        <circle cx="0.19" cy="0.28" r="0.07"/><circle cx="-0.19" cy="0.28" r="0.07"/>
+        <circle cx="-0.3" cy="-0.1" r="0.07"/>
+      </g>
+    </g>
+    <!-- cornflower (blue / василёк) -->
+    <g id="cf-petal">
+      <path d="M0 -0.25 L0.22 -0.62 L0.08 -1.05 L0 -0.72 L-0.08 -1.05 L-0.22 -0.62 Z" fill="#3f72b8"/>
+    </g>
+    <g id="cornflower">
+      <use href="#cf-petal" transform="rotate(0)"/>
+      <use href="#cf-petal" transform="rotate(45)"/>
+      <use href="#cf-petal" transform="rotate(90)"/>
+      <use href="#cf-petal" transform="rotate(135)"/>
+      <use href="#cf-petal" transform="rotate(180)"/>
+      <use href="#cf-petal" transform="rotate(225)"/>
+      <use href="#cf-petal" transform="rotate(270)"/>
+      <use href="#cf-petal" transform="rotate(315)"/>
+      <circle r="0.3" fill="#2b4f86"/>
+      <circle r="0.13" fill="#16365f"/>
+    </g>
+  </defs>
+
+  <use href="#poppy" transform="translate(40,38) scale(17)"/>
+  <use href="#cornflower" transform="translate(282,40) scale(15)"/>
+  <use href="#cornflower" transform="translate(38,108) scale(14)"/>
+  <use href="#poppy" transform="translate(284,108) scale(17)"/>
+  <use href="#poppy" transform="translate(160,20) scale(10)"/>
+  <use href="#cornflower" transform="translate(160,134) scale(10)"/>
+
+  <text x="160" y="92" text-anchor="middle" font-family="-apple-system, Helvetica, Arial, sans-serif"
+        font-size="50" font-weight="800" fill="#e0241c" stroke="#7a0f0f" stroke-width="0.8">100 zł</text>
+</svg>
