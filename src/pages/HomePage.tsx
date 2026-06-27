@@ -78,7 +78,10 @@ export default function HomePage() {
         >
           {theme === 'day' ? '☀' : '☾'}
         </div>
-        <h1 className="home__title">{t('appTitle')}</h1>
+        <div className="home__wordmark">
+          <p className="home__title home__eventname">{t('eventName')}</p>
+          <h1 className="home__title">{t('appTitle')}</h1>
+        </div>
         <p className="home__tagline">{t('homeTagline')}</p>
       </div>
 

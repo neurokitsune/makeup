@@ -1,6 +1,7 @@
 import type { Lang, Loc } from '../data/types'
 
 export type UIKey =
+  | 'eventName'
   | 'appTitle'
   | 'homeTagline'
   | 'homeIntro'
@@ -37,6 +38,7 @@ export type UIKey =
   | 'contestEventName'
 
 export const UI: Record<UIKey, Record<Lang, string>> = {
+  eventName: { be: 'varushniak', en: 'varushniak' },
   appTitle: { be: 'makeup', en: 'makeup' },
   homeTagline: {
     be: 'Твой вобраз на ноч Купалля',

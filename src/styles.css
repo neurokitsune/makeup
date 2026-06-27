@@ -448,6 +448,14 @@ body {
     animation: none;
   }
 }
+/* "varushniak" + "makeup" read as one stacked wordmark (tighter than hero gap). */
+.home__wordmark {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  line-height: 0.95; /* pull the two title lines tighter together */
+}
 .home__title {
   font-size: clamp(2.6rem, 14vw, 3.6rem);
   font-weight: 700;
