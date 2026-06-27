@@ -66,7 +66,7 @@ export const UI: Record<UIKey, Record<Lang, string>> = {
   chanceMan: { be: 'Мужчына', en: 'Man' },
   chancePreferNot: { be: 'Не хачу казаць', en: 'Prefer not to say' },
   tryAgain: { be: 'Яшчэ раз', en: 'Try again' },
-  randomName: { be: 'Выпадак', en: 'Chance' },
+  randomName: { be: 'Выпадковы мэйк', en: 'Random makeup' },
   randomTagline: { be: 'Хай Купалле вырашыць', en: 'Let Kupalle decide' },
   contestName: { be: 'Выйграй 100 zł', en: 'Win 100 zł' },
   contestHeader: { be: 'Гульня', en: 'Contest' },
