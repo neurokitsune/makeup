@@ -8,8 +8,8 @@ import Footer from '../components/Footer'
 
 // Theme-matched painting backdrops (drop the files into public/bg/).
 const BG = {
-  day: asset('bg/home-day.jpg'),
-  night: asset('bg/home-night.jpg'),
+  day: asset('bg/home-day.webp'),
+  night: asset('bg/home-night.webp'),
 }
 
 interface Spark {
@@ -43,7 +43,14 @@ export default function HomePage() {
   return (
     <main className="page home">
       <div className="home-bg" aria-hidden="true">
-        <img className="home-bg__img" src={BG[theme]} alt="" />
+        <img
+          className="home-bg__img"
+          src={BG[theme]}
+          alt=""
+          // First paint's largest element — tell the browser to prioritize it.
+          fetchPriority="high"
+          decoding="async"
+        />
         <div className="home-bg__veil" />
         <div className="home-sparks">
           {sparks.map((s, i) => (

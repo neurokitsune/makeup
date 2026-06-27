@@ -54,7 +54,12 @@ export default function DetailPage() {
       <AppHeader />
 
       <div className="detail__media">
-        <img src={asset(look.image)} alt={loc(look.name)} />
+        <img
+          src={asset(look.image)}
+          alt={loc(look.name)}
+          fetchPriority="high"
+          decoding="async"
+        />
       </div>
 
       {fromChance ? (

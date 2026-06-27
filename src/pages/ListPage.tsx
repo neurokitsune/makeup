@@ -27,9 +27,10 @@ export default function ListPage() {
           >
             <div className="style-card__media">
               <img
-                src={asset(look.image)}
+                src={asset(look.image.replace(/\.webp$/, '.thumb.webp'))}
                 alt=""
                 loading="lazy"
+                decoding="async"
                 style={look.crop ? { objectPosition: `50% ${look.crop}%` } : undefined}
               />
             </div>

@@ -10,8 +10,8 @@ import { track } from '../analytics'
 import { TOAST_PHRASES } from '../i18n/translations'
 
 const BG = {
-  day: asset('bg/woman-man-light.jpg'),
-  night: asset('bg/woman-man-dark.jpg'),
+  day: asset('bg/woman-man-light.webp'),
+  night: asset('bg/woman-man-dark.webp'),
 }
 
 export default function ChancePage() {

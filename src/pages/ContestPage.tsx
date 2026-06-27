@@ -13,8 +13,8 @@ const DARIA = 'daria_kalechits'
 const NEURO = 'neurokitsune'
 
 const BG = {
-  day: asset('bg/contest-light.jpg'),
-  night: asset('bg/contest-dark.jpg'),
+  day: asset('bg/contest-light.webp'),
+  night: asset('bg/contest-dark.webp'),
 }
 
 export default function ContestPage() {

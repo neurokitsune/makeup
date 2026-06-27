@@ -31,12 +31,14 @@ The main page shows a full-bleed painting that switches with the theme, plus
 warm "sparks" drifting upward (the `spark-rise` effect). The two paintings:
 
 ```
-public/bg/home-day.jpg     # bright daytime painting
-public/bg/home-night.jpg   # dark night painting
+public/bg/home-day.webp    # bright daytime painting
+public/bg/home-night.webp  # dark night painting
 ```
 
-These ship as plain dawn/dusk gradient placeholders — **overwrite them with the
-real paintings, keeping the same filenames**. A theme-aware scrim (`--home-veil`)
+Backgrounds are generated from `raw/bg/<name>.{jpg,png}` by `npm run optimize`
+(resized to 1000px wide, compressed hard at ~58% quality since a scrim sits over
+them) and written as `.webp`. Drop the real paintings into `raw/bg/` keeping the
+same base names, then re-run the optimizer. A theme-aware scrim (`--home-veil`)
 and text shadow (`--home-text-shadow`) keep the title legible over any image.
 
 ## Run
@@ -60,6 +62,7 @@ Drop the full-res originals (straight from the camera) into the git-ignored
 raw/styles/<name>.jpg          # style covers (optional — SVG placeholders ship by default)
 raw/lines/<name>.jpg           # one file per Lines look
 raw/rhinestones/<name>.jpg     # …and likewise flowers/, pearls/, men/
+raw/bg/<name>.jpg              # full-screen backdrops
 raw/daria.jpg                  # artist avatar
 
 npm run optimize               # → public/styles/ and public/looks/<style>/<name>.webp
@@ -67,7 +70,10 @@ npm run optimize               # → public/styles/ and public/looks/<style>/<na
 
 The script ([`scripts/optimize-photos.mjs`](scripts/optimize-photos.mjs))
 resizes to 1000px wide, fixes EXIF rotation, and writes `.webp` (~80% quality),
-keeping each file's base name. Originals stay in `raw/` and are never committed.
+keeping each file's base name. Each look photo doubles as the artist's makeup
+reference, so the full-size file stays high quality; alongside it the script also
+emits a small `<name>.thumb.webp` (640px, ~72% quality) used for the fast-loading
+look-list grid. Originals stay in `raw/` and are never committed.
 
 ### 2. List them — edit ONE file
 
